@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "ZGX Bridge Test",
+  "version": "0.2.0",
+  "description": "Test widget injection and Bridge connectivity for ZGX AI Bridge PoC",
+  "permissions": [],
+  "host_permissions": [
+    "http://192.168.xx.xxx:8080/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://*.onshape.com/*"],
+      "js": ["content.js"],
+      "css": ["widget.css"],
+      "run_at": "document_idle"
+    }
+  ]
+}
