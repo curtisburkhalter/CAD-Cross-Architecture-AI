@@ -1,0 +1,59 @@
+version: "3.8"
+# Fallback: same setup WITHOUT DFlash speculative decoding.
+# Use this if DFlash fails on sm_121 or causes memory issues.
+# Switch between configs with:
+#   docker compose -f docker-compose.yml up        (DFlash)
+#   docker compose -f docker-compose.no-dflash.yml up  (standard)
+services:
+
+  vllm:
+    image: vllm/vllm-openai:cu130-nightly
+    container_name: zgx-bridge-vllm
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    volumes:
+      - ${HF_CACHE:-/home/curtburk/.cache/huggingface}:/root/.cache/huggingface
+    ports:
+      - "8090:8000"
+    ipc: host
+    environment:
+      - HF_TOKEN=${HF_TOKEN:-}
+    command: >
+      --model Qwen/Qwen3.6-35B-A3B
+      --max-model-len 32768
+      --gpu-memory-utilization 0.90
+      --enable-prefix-caching
+      --trust-remote-code
+      --default-chat-template-kwargs '{"enable_thinking": false}'
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 300s
+
+  bridge:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: zgx-bridge-app
+    ports:
+      - "8080:8080"
+    environment:
+      - VLLM_BASE_URL=http://vllm:8000/v1
+      - VLLM_MODEL=Qwen/Qwen3.6-35B-A3B
+      - BRIDGE_API_KEYS=dev-test-key
+      - BRIDGE_LOG_LEVEL=info
+      - SESSION_TTL_MINUTES=30
+      - SESSION_MAX_TURNS=50
+      - SYSTEM_PROMPT_BASE=You are a helpful AI assistant embedded in an enterprise CAD application. Answer questions using the provided application context about the user's current design, parts, assemblies, and workspace. Be concise and professional. Do not fabricate data that is not present in the context. When discussing design modifications, reference specific features and components visible in the workspace.
+    depends_on:
+      vllm:
+        condition: service_healthy
+    restart: unless-stopped
