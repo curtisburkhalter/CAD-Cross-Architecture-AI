@@ -1,6 +1,6 @@
 # ZGX AI Bridge -- Browser Extension
 
-> **Disclaimer:** This is an educational proof-of-concept exploring browser-based context injection for AI assistants. Not affiliated with, endorsed by, or sponsored by PTC/Onshape or any ISV vendor. See Onshape documentation: https://cad.onshape.com/FsDocNot intended for production use. Check vendor terms of service before deploying similar approaches against any ISV application.
+> **Disclaimer:** This is an educational proof-of-concept exploring browser-based context injection for AI assistants. Not affiliated with, endorsed by, or sponsored by PTC/Onshape or any ISV vendor. See Onshape documentation: https://cad.onshape.com/FsDoc Not intended for production use. Check vendor terms of service before deploying similar approaches against any ISV application.
 
 ## What This Is
 
