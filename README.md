@@ -121,8 +121,8 @@ docker compose up -d bridge
 
 ### Install the Browser Extension
 
-1. Unzip `zgx-bridge-ext-v2.zip`
-2. Open `edge://extensions/` (or `chrome://extensions/`)
+1. Copy files from 'browser_extension' folder
+2. Open `edge://extensions/` (or `chrome://extensions/`) on your non-Nano device
 3. Enable Developer mode
 4. Click "Load unpacked", select the inner `zgx-bridge-ext-v2` folder
 5. Navigate to any Onshape document at `https://cad.onshape.com`
