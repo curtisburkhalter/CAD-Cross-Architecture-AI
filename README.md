@@ -279,4 +279,4 @@ Hit `/api/metrics`. Show the token counts, latency, cost comparison. Point at th
 
 ## License
 
-Internal HP demo. Not for distribution.
+Educational demo. Not for distribution.
